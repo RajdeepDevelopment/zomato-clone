@@ -519,5 +519,5 @@ zomato-clone/
 ---
 
 <p align="center">
-  Made with 🧡 · React · Express · TypeScript · Tailwind · shadcn/ui
+  Made with 🧡 · React · Express · TypeScript · Tailwind · shadcn/ui · built by Smoke Monkey 🐵
 </p>
