@@ -1,0 +1,222 @@
+import { Category, Collection, Restaurant } from "../types";
+
+/** Static, realistic seed data — stands in for a real database. */
+
+export const categories: Category[] = [
+  { id: "pizza", name: "Pizza", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=60", description: "Wood-fired & cheesy classics" },
+  { id: "burger", name: "Burger", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=60", description: "Juicy patties & loaded fries" },
+  { id: "chinese", name: "Chinese", image: "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=400&q=60", description: "Noodles, momos & wok tosses" },
+  { id: "south-indian", name: "South Indian", image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=400&q=60", description: "Dosas, idlis & filter coffee" },
+  { id: "north-indian", name: "North Indian", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400&q=60", description: "Curries, kebabs & naan" },
+  { id: "desserts", name: "Desserts", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&q=60", description: "Sweets, shakes & ice cream" },
+  { id: "biryani", name: "Biryani", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=400&q=60", description: "Fragrant rice & slow-cooked meat" },
+  { id: "rolls", name: "Rolls", image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=400&q=60", description: "Kathi rolls & wraps" },
+  { id: "cafe", name: "Cafe", image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=400&q=60", description: "Coffee, brunch & waffles" },
+  { id: "seafood", name: "Seafood", image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=400&q=60", description: "Fresh catch & coastal curries" }
+];
+
+export const restaurants: Restaurant[] = [
+  {
+    id: "r1",
+    name: "Burma Burma",
+    cuisine: ["Burmese", "Asian"],
+    priceForTwo: 1600,
+    rating: 4.6,
+    ratingCount: 22413,
+    deliveryTimeMins: 35,
+    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=60",
+    location: "Church Street, Bengaluru",
+    categoryId: "chinese",
+    offers: ["20% off up to ₹150"],
+    tags: ["Pure Veg", "Family Friendly"]
+  },
+  {
+    id: "r2",
+    name: "Punjabi Angaar",
+    cuisine: ["North Indian", "Mughlai"],
+    priceForTwo: 1800,
+    rating: 4.5,
+    ratingCount: 18352,
+    deliveryTimeMins: 30,
+    image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&q=60",
+    location: "Indiranagar, Bengaluru",
+    categoryId: "north-indian",
+    offers: ["Flat ₹100 off"],
+    tags: ["Non-Veg", "Live Kebabs"]
+  },
+  {
+    id: "r3",
+    name: "MTR 1924",
+    cuisine: ["South Indian", "Udupi"],
+    priceForTwo: 500,
+    rating: 4.4,
+    ratingCount: 45120,
+    deliveryTimeMins: 25,
+    image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&q=60",
+    location: "Lalbagh Road, Bengaluru",
+    categoryId: "south-indian",
+    offers: ["Free dessert on orders above ₹399"],
+    tags: ["Pure Veg", "Iconic"]
+  },
+  {
+    id: "r4",
+    name: "The Pizza Bakery",
+    cuisine: ["Pizza", "Italian"],
+    priceForTwo: 1200,
+    rating: 4.5,
+    ratingCount: 12098,
+    deliveryTimeMins: 40,
+    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=60",
+    location: "Koramangala, Bengaluru",
+    categoryId: "pizza",
+    offers: ["Buy 1 Get 1 on select pizzas"],
+    tags: ["Wood-fired", "Craft Beer"]
+  },
+  {
+    id: "r5",
+    name: "Empire Restaurant",
+    cuisine: ["Biryani", "Kebabs"],
+    priceForTwo: 900,
+    rating: 4.3,
+    ratingCount: 38210,
+    deliveryTimeMins: 28,
+    image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&q=60",
+    location: "Frazer Town, Bengaluru",
+    categoryId: "biryani",
+    offers: ["20% off up to ₹150"],
+    tags: ["Since 1979", "Famous Biryani"]
+  },
+  {
+    id: "r6",
+    name: "Truffles",
+    cuisine: ["Burger", "Continental"],
+    priceForTwo: 1000,
+    rating: 4.6,
+    ratingCount: 29114,
+    deliveryTimeMins: 32,
+    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=60",
+    location: "Koramangala, Bengaluru",
+    categoryId: "burger",
+    offers: ["₹125 off on orders above ₹499"],
+    tags: ["Legendary Burgers"]
+  },
+  {
+    id: "r7",
+    name: "Third Wave Coffee",
+    cuisine: ["Cafe", "Continental"],
+    priceForTwo: 700,
+    rating: 4.4,
+    ratingCount: 9854,
+    deliveryTimeMins: 22,
+    image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=60",
+    location: "Indiranagar, Bengaluru",
+    categoryId: "cafe",
+    offers: ["20% off on all cold brews"],
+    tags: ["Specialty Coffee", "Brunch Spot"]
+  },
+  {
+    id: "r8",
+    name: "Samudra",
+    cuisine: ["Seafood", "Coastal"],
+    priceForTwo: 1400,
+    rating: 4.5,
+    ratingCount: 7742,
+    deliveryTimeMins: 38,
+    image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=800&q=60",
+    location: "MG Road, Bengaluru",
+    categoryId: "seafood",
+    offers: ["Flat 15% off on seafood platters"],
+    tags: ["Non-Veg", "Coastal Specials"]
+  },
+  {
+    id: "r9",
+    name: "Kurtosq",
+    cuisine: ["Desserts", "Bakery"],
+    priceForTwo: 400,
+    rating: 4.2,
+    ratingCount: 5231,
+    deliveryTimeMins: 20,
+    image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800&q=60",
+    location: "Indiranagar, Bengaluru",
+    categoryId: "desserts",
+    offers: ["Free brownie with every 2 desserts"],
+    tags: ["Chimney Cakes", "Instagrammable"]
+  },
+  {
+    id: "r10",
+    name: "Roll Express",
+    cuisine: ["Rolls", "Street Food"],
+    priceForTwo: 300,
+    rating: 4.1,
+    ratingCount: 6890,
+    deliveryTimeMins: 18,
+    image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=800&q=60",
+    location: "Koramangala, Bengaluru",
+    categoryId: "rolls",
+    offers: ["₹50 off on first order"],
+    tags: ["Budget Friendly", "Late Night"]
+  },
+  {
+    id: "r11",
+    name: "Beijing Bites",
+    cuisine: ["Chinese", "Momos"],
+    priceForTwo: 600,
+    rating: 4.2,
+    ratingCount: 11054,
+    deliveryTimeMins: 26,
+    image: "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=800&q=60",
+    location: "HSR Layout, Bengaluru",
+    categoryId: "chinese",
+    offers: ["Buy 1 Get 1 on momos"],
+    tags: ["Momos", "Wok Tossed"]
+  },
+  {
+    id: "r12",
+    name: "Malgudi Dosa House",
+    cuisine: ["South Indian", "Chettinad"],
+    priceForTwo: 450,
+    rating: 4.4,
+    ratingCount: 15678,
+    deliveryTimeMins: 24,
+    image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&q=60",
+    location: "Basavanagudi, Bengaluru",
+    categoryId: "south-indian",
+    offers: ["Free filter coffee with every dosa"],
+    tags: ["Pure Veg", "Breakfast Spot"]
+  },
+  {
+    id: "r13",
+    name: "Humming Tree",
+    cuisine: ["Cafe", "All Day Breakfast"],
+    priceForTwo: 1100,
+    rating: 4.3,
+    ratingCount: 4210,
+    deliveryTimeMins: 35,
+    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=60",
+    location: "Indiranagar, Bengaluru",
+    categoryId: "cafe",
+    offers: ["Flat ₹100 off on brunches"],
+    tags: ["Live Music", "Pet Friendly"]
+  },
+  {
+    id: "r14",
+    name: "Biryani Blues",
+    cuisine: ["Biryani", "Hyderabadi"],
+    priceForTwo: 700,
+    rating: 4.3,
+    ratingCount: 24781,
+    deliveryTimeMins: 30,
+    image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&q=60",
+    location: "Jayanagar, Bengaluru",
+    categoryId: "biryani",
+    offers: ["20% off up to ₹100"],
+    tags: ["Hyderabadi Dum", "Juicy Chicken"]
+  }
+];
+
+export const collections: Collection[] = [
+  { id: "c1", title: "Trending This Week", description: "The most-loved spots in town right now", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=60", count: 34 },
+  { id: "c2", title: "Newly Opened", description: "Fresh on the block, worth a try", image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=60", count: 21 },
+  { id: "c3", title: "Legendary Places", description: "Iconic joints that defined the city", image: "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=60", count: 16 },
+  { id: "c4", title: "Great Cafes", description: "For your coffee and cake cravings", image: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=800&q=60", count: 27 }
+];

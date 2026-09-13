@@ -1,0 +1,19 @@
+{
+  "name": "zomato-clone",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Zomato clone — home page (React) + Node.js TypeScript backend",
+  "scripts": {
+    "install:all": "pnpm --dir backend install && pnpm --dir frontend install",
+    "dev": "concurrently -n backend,frontend -c blue,magenta \"pnpm --dir backend dev\" \"pnpm --dir frontend dev\"",
+    "build": "pnpm --dir backend build && pnpm --dir frontend build",
+    "start": "pnpm --dir backend start",
+    "typecheck": "pnpm --dir backend typecheck && pnpm --dir frontend typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
