@@ -35,7 +35,7 @@ React + Vite + Tailwind CSS + shadcn/ui on the frontend, Express + TypeScript on
 | **Categories** | 10 cuisine categories (Pizza, Burger, Chinese, South Indian, North Indian, Desserts, Biryani, Rolls, Cafe, Seafood) |
 | **Collections** | Curated lists (Trending This Week, Newly Opened, Legendary Places, Great Cafes) |
 | **Restaurant Cards** | Rating badge, delivery time, price-for-two, offers, veg/non-veg tags |
-| **Sorting** | By relevance, rating, delivery time, or price (low→high) |
+| **Sorting** | By relevance, rating, delivery time, or price (low to high) |
 | **Responsive** | Mobile-first with hamburger sheet menu, adaptive grids |
 | **Auth UI** | Log in / Sign up flows (UI state, ready for real auth) |
 | **Loading/Error** | Skeletons while fetching, friendly retry on API failure |
@@ -46,7 +46,7 @@ React + Vite + Tailwind CSS + shadcn/ui on the frontend, Express + TypeScript on
 
 ```mermaid
 flowchart TB
-    subgraph Client["Frontend — React SPA (Vite :5174)"]
+    subgraph Client["Frontend - React SPA (Vite :5174)"]
         A[App.tsx] --> B[Hero + SearchBar]
         A --> C[CategoryBar]
         A --> D[RestaurantGrid]
@@ -59,21 +59,22 @@ flowchart TB
         E --> H
     end
 
-    subgraph Server["Backend — Express API (port 4000)"]
+    subgraph Server["Backend - Express API (port 4000)"]
         I[restaurant.routes.ts] --> J[restaurant.controller.ts]
         J --> K[restaurant.service.ts]
         K --> L[restaurant.repository.ts]
         L --> M[data/seed.ts]
     end
 
-    H -- "/api/home/feed, /api/restaurants" --> I
-    H -- "GET /api/*" --> N[Vite Proxy\nhttp://localhost:4000]
+    H -- "/api/home/feed" --> I
+    H -- "/api/restaurants" --> I
+    H -- "GET /api/*" --> N[Vite Proxy\nlocalhost:4000]
     N --> I
 ```
 
 **Key points**
 
-- The frontend never talks to the backend directly — Vite's dev proxy forwards `/api` → `http://localhost:4000`.
+- The frontend never talks to the backend directly — Vite's dev proxy forwards `/api` to `http://localhost:4000`.
 - The backend is a clean **route → controller → service → repository → seed data** layering.
 - Swapping the in-memory repository for a real DB later only touches `restaurant.repository.ts`.
 
@@ -88,13 +89,13 @@ mindmap
       React 18 + TypeScript
       Vite 6
       Tailwind CSS 3
-      shadcn/ui (base-nova style)
+      shadcn/ui
       lucide-react icons
       react-router-dom 7
     Backend
       Node.js + Express 4
       TypeScript 5
-      tsx (dev runner)
+      tsx dev runner
       helmet / cors / morgan
     Tooling
       pnpm workspaces
@@ -108,67 +109,70 @@ mindmap
 
 ### Data Flow
 
-How data moves from seed → API → UI:
+How data moves from seed to API to UI:
 
 ```mermaid
 sequenceDiagram
-    participant U as User (Browser)
+    participant U as User
     participant F as React Components
-    participant A as API Client (lib/api.ts)
+    participant A as API Client
     participant V as Vite Proxy (5174)
     participant B as Express API (4000)
     participant R as Repository (seed.ts)
 
-    U->>F: Loads / (home)
-    F->>A: useEffect → api.getHomeFeed()
+    U->>F: Loads home page
+    F->>A: useEffect calls api.getHomeFeed()
     A->>V: GET /api/home/feed
-    V->>B: proxy → localhost:4000/api/home/feed
+    V->>B: proxy to localhost:4000
     B->>R: restaurantService.getHomeFeed()
-    R-->>B: { categories, popular, trending, collections }
-    B-->>A: JSON { data: HomeFeed }
+    R-->>B: categories + popular + trending + collections
+    B-->>A: JSON data
     A-->>F: typed HomeFeed
-    F-->>U: Renders Hero, CategoryBar, Collections, RestaurantGrid
+    F-->>U: renders Hero, CategoryBar, Collections, Grid
 
-    U->>F: Types "pizza" in search box
-    F->>A: onSearch → api.getRestaurants({ query: "pizza" })
+    U->>F: types "pizza" in search box
+    F->>A: api.getRestaurants({ query: "pizza" })
     A->>V: GET /api/restaurants?q=pizza
     V->>B: proxy
     B->>R: restaurantService.list({ query })
     R-->>B: filtered restaurants
-    B-->>F: { items: [...], total, limit }
-    F-->>U: Re-renders grid with filtered results
+    B-->>F: items + total + limit
+    F-->>U: re-renders grid with results
 ```
 
 ### User Journey
 
 ```mermaid
 flowchart LR
-    A((Landing\nHero + Search)) --> B{Search or\nbrowse?}
+    A((Landing\nHero + Search)) --> B{Search or browse}
     B -->|Type query| C[Filtered Restaurant Grid]
     B -->|Click category| D[Category Filtered Grid]
     B -->|Scroll| E[Collections\nTrending / New / Legendary / Cafes]
-    C --> F[Restaurant Card → Details*]
+    C --> F[Restaurant Card]
     D --> F
     E --> F
-    F --> G[Order via Zomato](External)
-    A --> H[Log in / Sign up] --> I[Session UI: Avatar, Pro badge]
+    F --> G[Order via Zomato]
+    A --> H[Log in or Sign up]
+    H --> I[Session UI\nAvatar + Pro badge]
 ```
 
-> `*` Restaurant detail page + cart flow are the next milestone — the card already receives the full `Restaurant` object.
+> Note: Restaurant detail page + cart flow are the next milestone — the card already receives the full `Restaurant` object.
 
 ### API Request Lifecycle
 
 ```mermaid
 flowchart TD
-    S[Browser fetch /api/restaurants?category=pizza] --> P[Vite dev proxy\n:5174 → :4000]
+    S[fetch /api/restaurants?category=pizza] --> P[Vite dev proxy\n5174 to 4000]
     P --> R1[Express Router\nrestaurant.routes.ts]
-    R1 --> C1[Controller\nparseListParams + validation]
+    R1 --> C1[Controller\nparse params + validate]
     C1 --> SVC[Service\nsort / filter / paginate]
     SVC --> REPO[Repository\nin-memory over seed.ts]
-    REPO -->|data| SVC --> C1 --> R1
-    R1 --> RESP{OK?}
-    RESP -->|yes| J1[JSON 200\ndata: items/total/limit]
-    RESP -->|no| J2[ApiError envelope\n{ code, message } → JSON 404/500]
+    REPO -->|data| SVC
+    SVC --> C1
+    C1 --> R1
+    R1 --> RESP{OK}
+    RESP -->|yes| J1[JSON 200\ndata + items + total]
+    RESP -->|no| J2[ApiError envelope\ncode + message]
 ```
 
 ### Repository Structure
@@ -176,11 +180,11 @@ flowchart TD
 ```mermaid
 flowchart TB
     ROOT[zomato-clone/]
-    ROOT --> PKG[package.json — pnpm workspace]
+    ROOT --> PKG[package.json - pnpm workspace]
     ROOT --> BE[backend/]
     ROOT --> FE[frontend/]
     ROOT --> DOCS[docs/]
-    ROOT --> GIT[.gitignore / README.md]
+    ROOT --> GIT[.gitignore + README.md]
 
     BE --> BESRC[src/]
     BESRC --> R[restaurant.routes.ts]
@@ -192,8 +196,8 @@ flowchart TB
     BESRC --> UTILS[utils/http.ts]
 
     FE --> FESRC[src/]
-    FESRC --> APP[App.tsx · main.tsx]
-    FESRC --> COMP[components/ 💡]
+    FESRC --> APP[App.tsx + main.tsx]
+    FESRC --> COMP[components/]
     COMP --> UI[ui/ shadcn components]
     COMP --> HERO[Hero.tsx]
     COMP --> NAV[Navbar.tsx]
@@ -201,10 +205,10 @@ flowchart TB
     COMP --> GRID[RestaurantGrid.tsx]
     COMP --> COL[Collections.tsx]
     COMP --> FOOT[Footer.tsx]
-    FESRC --> LIB[lib/api.ts · lib/utils.ts]
+    FESRC --> LIB[lib/api.ts + lib/utils.ts]
     FESRC --> TYPES2[types/index.ts]
 
-    DOCS --> SHOT[screenshots/ · README.md]
+    DOCS --> SHOT[screenshots/ + README.md]
 ```
 
 ---
@@ -215,35 +219,51 @@ flowchart TB
 
 **1. Hero + Search** — cinematic hero with location picker & live search:
 
-<img src="docs/screenshots/01-hero.png" width="720" alt="Hero section" />
+<div align="center">
+  <img src="docs/screenshots/01-hero.png" width="720" alt="Hero section" />
+</div>
 
 **2. Category Bar** — 10 cuisine categories with hover effects:
 
-<img src="docs/screenshots/02-categories.png" width="720" alt="Category bar" />
+<div align="center">
+  <img src="docs/screenshots/02-categories.png" width="720" alt="Category bar" />
+</div>
 
 **3. Restaurant Grid** — rating, delivery time, offers, price-for-two cards:
 
-<img src="docs/screenshots/03-restaurants.png" width="720" alt="Restaurant grid" />
+<div align="center">
+  <img src="docs/screenshots/03-restaurants.png" width="720" alt="Restaurant grid" />
+</div>
 
 **4. Collections** — curated list tiles:
 
-<img src="docs/screenshots/04-collections.png" width="720" alt="Collections" />
+<div align="center">
+  <img src="docs/screenshots/04-collections.png" width="720" alt="Collections" />
+</div>
 
 **5. Footer** — full multi-column footer with links & social:
 
-<img src="docs/screenshots/05-footer.png" width="720" alt="Footer" />
+<div align="center">
+  <img src="docs/screenshots/05-footer.png" width="720" alt="Footer" />
+</div>
 
 **6. Mobile view (390px)** — responsive hamburger nav:
 
-<img src="docs/screenshots/06-mobile.png" width="320" alt="Mobile view" />
+<div align="center">
+  <img src="docs/screenshots/06-mobile.png" width="320" alt="Mobile view" />
+</div>
 
 **7. Live Search "pizza"** — real-time filtering:
 
-<img src="docs/screenshots/07-search-pizza.png" width="720" alt="Search pizza" />
+<div align="center">
+  <img src="docs/screenshots/07-search-pizza.png" width="720" alt="Search pizza" />
+</div>
 
 **8. Category Filter "Pizza"** — clicking the category chip filters results:
 
-<img src="docs/screenshots/08-category-pizza.png" width="720" alt="Category filter" />
+<div align="center">
+  <img src="docs/screenshots/08-category-pizza.png" width="720" alt="Category filter" />
+</div>
 
 ---
 
@@ -422,12 +442,12 @@ coverage/
 ```mermaid
 flowchart LR
     A[Write code] --> B[tsc --noEmit]
-    B -->|pass| C[Frontend: vite build]
-    C -->|pass| D[Start backend :4000]
-    D --> E[curl /health + /api/home/feed]
-    E -->|pass| F[Start frontend :5174]
-    F --> G[Playwright screenshot\n+ console check]
-    G -->|pass| H[✅ Done — commit]
+    B -->|pass| C[Frontend vite build]
+    C -->|pass| D[Start backend 4000]
+    D --> E[curl health + home feed]
+    E -->|pass| F[Start frontend 5174]
+    F --> G[Playwright screenshots]
+    G -->|pass| H[Done - commit]
     B -.->|fail| A
     C -.->|fail| A
 ```
