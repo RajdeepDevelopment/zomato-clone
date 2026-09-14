@@ -17,6 +17,7 @@ export const api = {
     if (params.categoryId) queryParams.set("category", params.categoryId);
     if (params.query) queryParams.set("q", params.query);
     if (params.sort) queryParams.set("sort", params.sort);
+    queryParams.set("limit", "50");
 
     const res = await fetch(`/api/restaurants?${queryParams.toString()}`);
     if (!res.ok) throw new Error("Failed to fetch restaurants");
