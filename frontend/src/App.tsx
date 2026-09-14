@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { api } from "./lib/api";
 import { Category, Collection, Restaurant } from "./types";
 import { Hero } from "./components/Hero";
@@ -8,9 +9,11 @@ import { RestaurantGrid } from "./components/RestaurantGrid";
 import { Footer } from "./components/Footer";
 import { Skeleton } from "./components/ui/skeleton";
 import { Button } from "./components/ui/button";
-import { Flame, Star, Clock, SlidersHorizontal, RefreshCw } from "lucide-react";
+import { Flame, Star, Clock } from "lucide-react";
+import RestaurantDetailPage from "./pages/RestaurantDetailPage";
 
-export function App() {
+function HomePage() {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -25,14 +28,12 @@ export function App() {
       setLoading(true);
       setError(null);
 
-      // If no category and no search, fetch home feed
       if (!catId && !query && sort === "relevance") {
         const feed = await api.getHomeFeed();
         setCategories(feed.categories);
         setCollections(feed.collections);
         setRestaurants(feed.popular);
       } else {
-        // Otherwise fetch filtered list
         const [cats, cols, resData] = await Promise.all([
           categories.length === 0 ? api.getCategories() : Promise.resolve(categories),
           collections.length === 0 ? api.getCollections() : Promise.resolve(collections),
@@ -59,90 +60,80 @@ export function App() {
     loadData(selectedCategoryId, q, sortBy);
   };
 
-  const handleSelectCategory = (catId: string | undefined) => {
-    setSelectedCategoryId(catId);
+  const handleSelectCategory = (categoryId: string | undefined) => {
+    setSelectedCategoryId(categoryId);
     setSearchQuery("");
   };
 
+  const handleSelectRestaurant = (restaurant: Restaurant) => {
+    navigate(`/restaurant/${restaurant.id}`);
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-background text-foreground font-sans">
-      {/* Hero with Search */}
+    <div className="min-h-screen bg-white">
+      {/* Hero */}
       <Hero
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         onSearch={handleSearch}
       />
 
-      {/* Main Container */}
-      <main className="flex-1">
+      <main>
         {error ? (
-          <div className="container mx-auto px-4 py-20 text-center">
-            <div className="max-w-md mx-auto p-8 bg-destructive/10 border border-destructive/20 rounded-2xl">
-              <h3 className="text-lg font-bold text-destructive mb-2">Connection Error</h3>
-              <p className="text-sm text-gray-600 mb-6">{error}</p>
-              <Button onClick={() => loadData(selectedCategoryId, searchQuery, sortBy)} className="bg-zomato hover:bg-zomato-dark text-white gap-2">
-                <RefreshCw className="size-4" />
-                Retry Connection
-              </Button>
-            </div>
+          <div className="container mx-auto px-4 md:px-6 py-16 text-center">
+            <p className="text-red-500 text-lg font-medium mb-2">Something went wrong</p>
+            <p className="text-gray-500 text-sm mb-4">{error}</p>
+            <Button onClick={() => loadData(selectedCategoryId, searchQuery, sortBy)} variant="outline" size="sm">
+              Retry
+            </Button>
           </div>
         ) : (
           <>
-            {/* Category Bar */}
-            {categories.length > 0 && (
-              <CategoryBar
-                categories={categories}
-                selectedCategoryId={selectedCategoryId}
-                onSelectCategory={handleSelectCategory}
-              />
-            )}
+            {/* Category bar */}
+            <CategoryBar
+              categories={categories}
+              selectedCategoryId={selectedCategoryId}
+              onSelectCategory={handleSelectCategory}
+            />
 
-            {/* Collections Section (Only show if not filtering or searching) */}
+            {/* Collections */}
             {!selectedCategoryId && !searchQuery && collections.length > 0 && (
               <Collections collections={collections} />
             )}
 
-            {/* Sort & Filter Bar */}
-            <div className="container mx-auto px-4 md:px-6 pt-8 pb-4 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <SlidersHorizontal className="size-5 text-gray-500" />
-                <span className="font-bold text-gray-800 text-lg">
-                  {selectedCategoryId
-                    ? `Restaurants in ${selectedCategoryId.toUpperCase()}`
-                    : searchQuery
-                    ? `Search results for "${searchQuery}"`
-                    : "Trending Restaurants"}
-                </span>
-                <span className="text-xs bg-gray-100 text-gray-600 px-2.5 py-1 rounded-full font-semibold">
-                  {restaurants.length} places
-                </span>
-              </div>
+            {/* Filters / Sort bar */}
+            <div className="container mx-auto px-4 md:px-6 pt-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <p className="text-sm text-gray-500">
+                  {restaurants.length} restaurant{restaurants.length !== 1 ? "s" : ""} found
+                </p>
 
-              {/* Sort pills */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-                {[
-                  { id: "relevance", label: "Relevance", icon: Flame },
-                  { id: "rating", label: "Rating 4.0+", icon: Star },
-                  { id: "delivery", label: "Delivery Time", icon: Clock },
-                  { id: "price", label: "Price: Low to High", icon: null },
-                ].map((tab) => {
-                  const Icon = tab.icon;
-                  const isActive = sortBy === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setSortBy(tab.id as any)}
-                      className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
-                        isActive
-                          ? "bg-zomato text-white border-zomato shadow-sm"
-                          : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
-                      }`}
-                    >
-                      {Icon && <Icon className="size-3.5" />}
-                      <span>{tab.label}</span>
-                    </button>
-                  );
-                })}
+                {/* Sort pills */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+                  {[
+                    { id: "relevance", label: "Relevance", icon: Flame },
+                    { id: "rating", label: "Rating 4.0+", icon: Star },
+                    { id: "delivery", label: "Delivery Time", icon: Clock },
+                    { id: "price", label: "Price: Low to High", icon: null },
+                  ].map((tab) => {
+                    const Icon = tab.icon;
+                    const isActive = sortBy === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setSortBy(tab.id as any)}
+                        className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
+                          isActive
+                            ? "bg-zomato text-white border-zomato shadow-sm"
+                            : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+                        }`}
+                      >
+                        {Icon && <Icon className="size-3.5" />}
+                        <span>{tab.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -170,15 +161,24 @@ export function App() {
                     : "Delivery Restaurants in Bengaluru"
                 }
                 subtitle="All restaurants sorted by quality, delivery time & rating"
+                onSelectRestaurant={handleSelectRestaurant}
               />
             )}
           </>
         )}
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/restaurant/:id" element={<RestaurantDetailPage />} />
+    </Routes>
   );
 }
 

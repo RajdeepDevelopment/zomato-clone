@@ -1,4 +1,4 @@
-import { Category, Collection, Restaurant } from "../types";
+import { Category, Collection, MenuItem, Restaurant } from "../types";
 
 /** Static, realistic seed data — stands in for a real database. */
 
@@ -15,6 +15,237 @@ export const categories: Category[] = [
   { id: "seafood", name: "Seafood", image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=400&q=60", description: "Fresh catch & coastal curries" }
 ];
 
+/* ---------- Rich detail data (menu, photos, highlights, timings) — hoisted to avoid TDZ ---------- */
+
+const foodPhotos: Record<string, string[]> = {
+  chinese: [
+    "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=800&q=60",
+    "https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=60",
+    "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=800&q=60",
+  ],
+  "north-indian": [
+    "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=800&q=60",
+    "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=800&q=60",
+    "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&q=60",
+  ],
+  "south-indian": [
+    "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&q=60",
+    "https://images.unsplash.com/photo-1630383249896-424e482df921?w=800&q=60",
+    "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&q=60",
+  ],
+  pizza: [
+    "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=60",
+    "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=60",
+    "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?w=800&q=60",
+  ],
+  biryani: [
+    "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&q=60",
+    "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=800&q=60",
+    "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&q=60",
+  ],
+  burger: [
+    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=60",
+    "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=800&q=60",
+    "https://images.unsplash.com/photo-1550547660-d9450f859349?w=800&q=60",
+  ],
+  cafe: [
+    "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=60",
+    "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=60",
+    "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=60",
+  ],
+  seafood: [
+    "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=800&q=60",
+    "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&q=60",
+    "https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=800&q=60",
+  ],
+  desserts: [
+    "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=800&q=60",
+    "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=800&q=60",
+    "https://images.unsplash.com/photo-1542124948-dc391252a7e1?w=800&q=60",
+  ],
+  rolls: [
+    "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=800&q=60",
+    "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=800&q=60",
+    "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=800&q=60",
+  ],
+};
+
+const menuItems: MenuItem[] = [
+  // Chinese — Burma Burma
+  { id: "m1", name: "Khow Suey", description: "Creamy coconut chicken noodles", price: 450, category: "Mains", image: "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=600&q=60", isVeg: false, bestseller: true },
+  { id: "m2", name: "Samuza Hincho", description: "Burmese samosa soup", price: 350, category: "Starters", image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=60", isVeg: false },
+  { id: "m3", name: "Tohu Thoke", description: "Tofu salad with sesame dressing", price: 300, category: "Salads", image: "https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=60", isVeg: true },
+  { id: "m4", name: "Mont Di", description: "Burmese rice noodles with fish", price: 380, category: "Mains", image: "https://images.unsplash.com/photo-1525755662778-989d0524087e?w=600&q=60", isVeg: false },
+
+  // North Indian — Punjabi Angaar
+  { id: "m5", name: "Butter Chicken", description: "Creamy tomato-based chicken curry", price: 420, category: "Mains", image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&q=60", isVeg: false, bestseller: true },
+  { id: "m6", name: "Dal Makhani", description: "Slow-cooked black lentils in butter", price: 320, category: "Mains", image: "https://images.unsplash.com/photo-1567188040759-fb8a883dc6d8?w=600&q=60", isVeg: true },
+  { id: "m7", name: "Paneer Tikka", description: "Chargrilled cottage cheese cubes", price: 380, category: "Starters", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&q=60", isVeg: true },
+  { id: "m8", name: "Garlic Naan", description: "Freshly baked tandoori bread", price: 120, category: "Breads", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=60", isVeg: true },
+
+  // South Indian — MTR 1924
+  { id: "m9", name: "Masala Dosa", description: "Crispy rice crepe with spiced potato", price: 180, category: "Tiffin", image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&q=60", isVeg: true, bestseller: true },
+  { id: "m10", name: "Idli Vada", description: "Steamed cakes with fried lentil donuts", price: 120, category: "Tiffin", image: "https://images.unsplash.com/photo-1630383249896-424e482df921?w=600&q=60", isVeg: true },
+  { id: "m11", name: "Filter Coffee", description: "Strong decoction with frothy hot milk", price: 60, category: "Beverages", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&q=60", isVeg: true },
+  { id: "m12", name: "Rava Idli", description: "Semolina steamed cake with ghee", price: 140, category: "Tiffin", image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=600&q=60", isVeg: true },
+
+  // Pizza — The Pizza Bakery
+  { id: "m13", name: "Margherita", description: "San Marzano tomato, mozzarella, basil", price: 450, category: "Pizzas", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=60", isVeg: true, bestseller: true },
+  { id: "m14", name: "Pepperoni", description: "Spicy pepperoni with mozzarella", price: 550, category: "Pizzas", image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=600&q=60", isVeg: false },
+  { id: "m15", name: "Truffle Mushroom", description: "Wild mushrooms with truffle oil", price: 600, category: "Pizzas", image: "https://images.unsplash.com/photo-1595708684082-a173bb3a06c5?w=600&q=60", isVeg: true },
+  { id: "m16", name: "Garlic Bread", description: "Herb butter garlic bread with cheese", price: 280, category: "Sides", image: "https://images.unsplash.com/photo-1619535860434-ba1d8fa12536?w=600&q=60", isVeg: true },
+
+  // Biryani — Empire Restaurant
+  { id: "m17", name: "Chicken Biryani", description: "Dum-cooked basmati with spiced chicken", price: 350, category: "Mains", image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&q=60", isVeg: false, bestseller: true },
+  { id: "m18", name: "Mutton Biryani", description: "Slow-cooked mutton in fragrant rice", price: 450, category: "Mains", image: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&q=60", isVeg: false },
+  { id: "m19", name: "Veg Biryani", description: "Garden vegetables with basmati rice", price: 250, category: "Mains", image: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=600&q=60", isVeg: true },
+  { id: "m20", name: "Chicken 65", description: "Spicy deep-fried chicken bites", price: 300, category: "Starters", image: "https://images.unsplash.com/photo-1609182241510-d795a56944de?w=600&q=60", isVeg: false },
+
+  // Burger — Truffles
+  { id: "m21", name: "Classic Cheeseburger", description: "Double patty with melted cheddar", price: 350, category: "Burgers", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=60", isVeg: false, bestseller: true },
+  { id: "m22", name: "BBQ Bacon Burger", description: "Smoky BBQ sauce with crispy bacon", price: 420, category: "Burgers", image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=600&q=60", isVeg: false },
+  { id: "m23", name: "Paneer Burger", description: "Spiced paneer patty with mint mayo", price: 300, category: "Burgers", image: "https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&q=60", isVeg: true },
+  { id: "m24", name: "Loaded Fries", description: "Cheese, jalapeños & sour cream", price: 220, category: "Sides", image: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=600&q=60", isVeg: true },
+
+  // Cafe — Third Wave Coffee
+  { id: "m25", name: "Pour Over", description: "Single-origin hand-poured coffee", price: 250, category: "Coffee", image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=60", isVeg: true },
+  { id: "m26", name: "Avocado Toast", description: "Sourdough with smashed avo & microgreens", price: 350, category: "All Day", image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=60", isVeg: true, bestseller: true },
+  { id: "m27", name: "Iced Latte", description: "Double-shot espresso with cold milk", price: 200, category: "Coffee", image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=60", isVeg: true },
+  { id: "m28", name: "Banana Pancakes", description: "Fluffy buttermilk stack with maple syrup", price: 325, category: "All Day", image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&q=60", isVeg: true },
+
+  // Seafood — Samudra
+  { id: "m29", name: "Kerala Fish Curry", description: "Fiery coconut curry with kingfish", price: 425, category: "Mains", image: "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=600&q=60", isVeg: false, bestseller: true },
+  { id: "m30", name: "Prawn Ghee Roast", description: "Mangalorean-style prawns in ghee masala", price: 485, category: "Starters", image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=600&q=60", isVeg: false },
+  { id: "m31", name: "Neer Dosa with Fish", description: "Lacy rice crepes with coastal fish curry", price: 395, category: "Mains", image: "https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=600&q=60", isVeg: false },
+
+  // Desserts — Kurtosq
+  { id: "m32", name: "Kurtos Chimney Cake", description: "Cinnamon-sugar spiral, freshly rolled", price: 175, category: "Bakery", image: "https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=60", isVeg: true, bestseller: true },
+  { id: "m33", name: "Brownie Sundae", description: "Warm brownie with vanilla gelato", price: 225, category: "Ice Cream", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=600&q=60", isVeg: true },
+  { id: "m34", name: "Tiramisu Cup", description: "Espresso-soaked ladyfingers & mascarpone", price: 245, category: "Bakery", image: "https://images.unsplash.com/photo-1542124948-dc391252a7e1?w=600&q=60", isVeg: true },
+
+  // Rolls — Roll Express
+  { id: "m35", name: "Paneer Kathi Roll", description: "Paneer tikka wrapped in flaky paratha", price: 129, category: "Rolls", image: "https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=600&q=60", isVeg: true, bestseller: true },
+  { id: "m36", name: "Chicken Tikka Roll", description: "Smoky chicken tikka with onions & chutney", price: 159, category: "Rolls", image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=600&q=60", isVeg: false },
+  { id: "m37", name: "Egg Mayo Roll", description: "Spiced egg mayo with crisp cabbage", price: 119, category: "Rolls", image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?w=600&q=60", isVeg: false },
+];
+
+export const restaurantDetails: Record<string, Partial<Restaurant>> = {
+  r1: {
+    menu: [menuItems[0], menuItems[1], menuItems[2], menuItems[3]],
+    photos: foodPhotos.chinese,
+    description: "A legendary Burmese fine-dining spot tucked into Hotel Royal Orchid — famous for its vegan-friendly, gluten-free cuisine served in a tranquil garden courtyard.",
+    highlights: ["Pure Veg", "Fine Dining", "20+ Years"],
+    timings: { open: "12:00 PM", close: "11:00 PM" },
+    contact: { phone: "+91 80 4567 1234", address: "14/5, Midmac House, Residency Road, Bengaluru 560025", website: "https://burmaburma.in" },
+  },
+  r2: {
+    menu: [menuItems[4], menuItems[5], menuItems[6], menuItems[7]],
+    photos: foodPhotos["north-indian"],
+    description: "A roaring North Indian kitchen known for live tandoor counters, smoky kebabs and rich Mughlai gravies in a lively, family-friendly setting.",
+    highlights: ["Live Kebabs", "Family Friendly", "Valet Parking"],
+    timings: { open: "12:00 PM", close: "11:30 PM" },
+    contact: { phone: "+91 80 2528 9876", address: "789, 100 Feet Road, Indiranagar, Bengaluru 560038" },
+  },
+  r3: {
+    menu: [menuItems[8], menuItems[9], menuItems[10], menuItems[11]],
+    photos: foodPhotos["south-indian"],
+    description: "An iconic Bengaluru institution since 1924, serving time-honoured Udupi breakfasts, filter coffee and thalis in a heritage setting.",
+    highlights: ["Iconic", "Pure Veg", "Since 1924"],
+    timings: { open: "7:00 AM", close: "10:00 PM" },
+    contact: { phone: "+91 80 2221 3456", address: "Mavalli Tiffin Room, Lalbagh Road, Bengaluru 560004", website: "https://mtr1924.com" },
+  },
+  r4: {
+    menu: [menuItems[12], menuItems[13], menuItems[14], menuItems[15]],
+    photos: foodPhotos.pizza,
+    description: "A wood-fired pizzeria with a cult following — blistered sourdough bases, seasonal toppings and an extensive craft beer list.",
+    highlights: ["Wood-fired", "Craft Beer", "Pet Friendly"],
+    timings: { open: "11:00 AM", close: "12:00 AM" },
+    contact: { phone: "+91 80 4678 5678", address: "23, 80 Feet Road, Koramangala 4th Block, Bengaluru 560034" },
+  },
+  r5: {
+    menu: [menuItems[16], menuItems[17], menuItems[19]],
+    photos: foodPhotos.biryani,
+    description: "A Bengaluru classic serving hearty, no-fuss biryanis and kebabs since 1979 — midnight cravings, sorted.",
+    highlights: ["Since 1979", "Late Night", "Famous Biryani"],
+    timings: { open: "12:00 PM", close: "1:00 AM" },
+    contact: { phone: "+91 80 2557 4321", address: "16, Mosque Road, Frazer Town, Bengaluru 560005" },
+  },
+  r6: {
+    menu: [menuItems[20], menuItems[21], menuItems[22], menuItems[23]],
+    photos: foodPhotos.burger,
+    description: "Koramangala's beloved burger joint known for colossal stacks, thick shakes and a chill weekend vibe.",
+    highlights: ["Legendary Burgers", "Thick Shakes", "Weekend Brunch"],
+    timings: { open: "11:00 AM", close: "1:00 AM" },
+    contact: { phone: "+91 80 4098 7654", address: "45, 5th Main, Koramangala 5th Block, Bengaluru 560095" },
+  },
+  r7: {
+    menu: [menuItems[24], menuItems[25], menuItems[26], menuItems[27]],
+    photos: foodPhotos.cafe,
+    description: "A specialty-coffee café chain with single-origin beans, pour-overs and a bright all-day brunch menu.",
+    highlights: ["Specialty Coffee", "Free WiFi", "Brunch Spot"],
+    timings: { open: "8:00 AM", close: "11:00 PM" },
+    contact: { phone: "+91 80 4856 1212", address: "12, 100 Feet Road, Indiranagar, Bengaluru 560038", website: "https://thirdwavecoffee.in" },
+  },
+  r8: {
+    menu: [menuItems[28], menuItems[29], menuItems[30]],
+    photos: foodPhotos.seafood,
+    description: "Coastal Karnataka's best-kept secret — fresh catch, fiery ghee roasts and neer dosas on MG Road.",
+    highlights: ["Fresh Catch", "Coastal Specials", "Non-Veg"],
+    timings: { open: "12:00 PM", close: "11:30 PM" },
+    contact: { phone: "+91 80 2558 3456", address: "88, MG Road, Bengaluru 560001" },
+  },
+  r9: {
+    menu: [menuItems[31], menuItems[32], menuItems[33]],
+    photos: foodPhotos.desserts,
+    description: "Instagram-famous chimney cakes rolled fresh to order, plus decadent sundaes and café-style desserts.",
+    highlights: ["Chimney Cakes", "Instagrammable", "Freshly Rolled"],
+    timings: { open: "11:00 AM", close: "11:00 PM" },
+    contact: { phone: "+91 80 4567 8901", address: "56, 12th Main, HAL 2nd Stage, Indiranagar, Bengaluru 560008" },
+  },
+  r10: {
+    menu: [menuItems[34], menuItems[35], menuItems[36]],
+    photos: foodPhotos.rolls,
+    description: "Late-night kathi-roll heaven — flaky parathas stuffed with fiery fillings at prices that don't hurt.",
+    highlights: ["Budget Friendly", "Late Night", "Street Food"],
+    timings: { open: "11:00 AM", close: "2:00 AM" },
+    contact: { phone: "+91 80 2553 2233", address: "23, 5th Block, Koramangala, Bengaluru 560095" },
+  },
+  r11: {
+    menu: [menuItems[0], menuItems[2], menuItems[3], menuItems[19]],
+    photos: foodPhotos.chinese,
+    description: "A wok-fired Chinese kitchen famous for its juicy momos, hand-pulled noodles and fiery schezwan platters.",
+    highlights: ["Momos", "Wok Tossed", "Hygienic"],
+    timings: { open: "11:00 AM", close: "11:30 PM" },
+    contact: { phone: "+91 80 2572 4455", address: "67, 27th Main, HSR Layout Sector 2, Bengaluru 560102" },
+  },
+  r12: {
+    menu: [menuItems[8], menuItems[9], menuItems[10], menuItems[11]],
+    photos: foodPhotos["south-indian"],
+    description: "A neighbourhood favourite in Basavanagudi serving authentic Chettinad-style dosas and filter coffee.",
+    highlights: ["Breakfast Spot", "Pure Veg", "Chettinad"],
+    timings: { open: "7:00 AM", close: "10:30 PM" },
+    contact: { phone: "+91 80 2661 7890", address: "15, Gandhi Bazaar Main Road, Basavanagudi, Bengaluru 560004" },
+  },
+  r13: {
+    menu: [menuItems[24], menuItems[26], menuItems[27], menuItems[28]],
+    photos: foodPhotos.cafe,
+    description: "An artsy Indiranagar café with live music, a pet-friendly lawn and an indulgent all-day breakfast.",
+    highlights: ["Live Music", "Pet Friendly", "All Day Breakfast"],
+    timings: { open: "9:00 AM", close: "11:30 PM" },
+    contact: { phone: "+91 80 4856 5678", address: "34, 100 Feet Road, Indiranagar, Bengaluru 560038" },
+  },
+  r14: {
+    menu: [menuItems[16], menuItems[18], menuItems[19]],
+    photos: foodPhotos.biryani,
+    description: "Authentic Hyderabadi dum biryani — hand-pounded spices, sealed handis and juicy chicken every time.",
+    highlights: ["Hyderabadi Dum", "Handi Sealed", "Juicy Chicken"],
+    timings: { open: "11:30 AM", close: "11:30 PM" },
+    contact: { phone: "+91 80 2663 3210", address: "92, Jayanagar 4th Block, Bengaluru 560041" },
+  },
+};
+
+/* ---------- Restaurant base data ---------- */
+
 export const restaurants: Restaurant[] = [
   {
     id: "r1",
@@ -28,7 +259,8 @@ export const restaurants: Restaurant[] = [
     location: "Church Street, Bengaluru",
     categoryId: "chinese",
     offers: ["20% off up to ₹150"],
-    tags: ["Pure Veg", "Family Friendly"]
+    tags: ["Pure Veg", "Family Friendly"],
+    ...restaurantDetails.r1,
   },
   {
     id: "r2",
@@ -42,7 +274,8 @@ export const restaurants: Restaurant[] = [
     location: "Indiranagar, Bengaluru",
     categoryId: "north-indian",
     offers: ["Flat ₹100 off"],
-    tags: ["Non-Veg", "Live Kebabs"]
+    tags: ["Non-Veg", "Live Kebabs"],
+    ...restaurantDetails.r2,
   },
   {
     id: "r3",
@@ -56,7 +289,8 @@ export const restaurants: Restaurant[] = [
     location: "Lalbagh Road, Bengaluru",
     categoryId: "south-indian",
     offers: ["Free dessert on orders above ₹399"],
-    tags: ["Pure Veg", "Iconic"]
+    tags: ["Pure Veg", "Iconic"],
+    ...restaurantDetails.r3,
   },
   {
     id: "r4",
@@ -70,7 +304,8 @@ export const restaurants: Restaurant[] = [
     location: "Koramangala, Bengaluru",
     categoryId: "pizza",
     offers: ["Buy 1 Get 1 on select pizzas"],
-    tags: ["Wood-fired", "Craft Beer"]
+    tags: ["Wood-fired", "Craft Beer"],
+    ...restaurantDetails.r4,
   },
   {
     id: "r5",
@@ -84,7 +319,8 @@ export const restaurants: Restaurant[] = [
     location: "Frazer Town, Bengaluru",
     categoryId: "biryani",
     offers: ["20% off up to ₹150"],
-    tags: ["Since 1979", "Famous Biryani"]
+    tags: ["Since 1979", "Famous Biryani"],
+    ...restaurantDetails.r5,
   },
   {
     id: "r6",
@@ -98,7 +334,8 @@ export const restaurants: Restaurant[] = [
     location: "Koramangala, Bengaluru",
     categoryId: "burger",
     offers: ["₹125 off on orders above ₹499"],
-    tags: ["Legendary Burgers"]
+    tags: ["Legendary Burgers"],
+    ...restaurantDetails.r6,
   },
   {
     id: "r7",
@@ -112,7 +349,8 @@ export const restaurants: Restaurant[] = [
     location: "Indiranagar, Bengaluru",
     categoryId: "cafe",
     offers: ["20% off on all cold brews"],
-    tags: ["Specialty Coffee", "Brunch Spot"]
+    tags: ["Specialty Coffee", "Brunch Spot"],
+    ...restaurantDetails.r7,
   },
   {
     id: "r8",
@@ -126,7 +364,8 @@ export const restaurants: Restaurant[] = [
     location: "MG Road, Bengaluru",
     categoryId: "seafood",
     offers: ["Flat 15% off on seafood platters"],
-    tags: ["Non-Veg", "Coastal Specials"]
+    tags: ["Non-Veg", "Coastal Specials"],
+    ...restaurantDetails.r8,
   },
   {
     id: "r9",
@@ -140,7 +379,8 @@ export const restaurants: Restaurant[] = [
     location: "Indiranagar, Bengaluru",
     categoryId: "desserts",
     offers: ["Free brownie with every 2 desserts"],
-    tags: ["Chimney Cakes", "Instagrammable"]
+    tags: ["Chimney Cakes", "Instagrammable"],
+    ...restaurantDetails.r9,
   },
   {
     id: "r10",
@@ -154,7 +394,8 @@ export const restaurants: Restaurant[] = [
     location: "Koramangala, Bengaluru",
     categoryId: "rolls",
     offers: ["₹50 off on first order"],
-    tags: ["Budget Friendly", "Late Night"]
+    tags: ["Budget Friendly", "Late Night"],
+    ...restaurantDetails.r10,
   },
   {
     id: "r11",
@@ -168,7 +409,8 @@ export const restaurants: Restaurant[] = [
     location: "HSR Layout, Bengaluru",
     categoryId: "chinese",
     offers: ["Buy 1 Get 1 on momos"],
-    tags: ["Momos", "Wok Tossed"]
+    tags: ["Momos", "Wok Tossed"],
+    ...restaurantDetails.r11,
   },
   {
     id: "r12",
@@ -182,7 +424,8 @@ export const restaurants: Restaurant[] = [
     location: "Basavanagudi, Bengaluru",
     categoryId: "south-indian",
     offers: ["Free filter coffee with every dosa"],
-    tags: ["Pure Veg", "Breakfast Spot"]
+    tags: ["Pure Veg", "Breakfast Spot"],
+    ...restaurantDetails.r12,
   },
   {
     id: "r13",
@@ -196,7 +439,8 @@ export const restaurants: Restaurant[] = [
     location: "Indiranagar, Bengaluru",
     categoryId: "cafe",
     offers: ["Flat ₹100 off on brunches"],
-    tags: ["Live Music", "Pet Friendly"]
+    tags: ["Live Music", "Pet Friendly"],
+    ...restaurantDetails.r13,
   },
   {
     id: "r14",
@@ -210,7 +454,8 @@ export const restaurants: Restaurant[] = [
     location: "Jayanagar, Bengaluru",
     categoryId: "biryani",
     offers: ["20% off up to ₹100"],
-    tags: ["Hyderabadi Dum", "Juicy Chicken"]
+    tags: ["Hyderabadi Dum", "Juicy Chicken"],
+    ...restaurantDetails.r14,
   }
 ];
 

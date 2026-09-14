@@ -1,3 +1,14 @@
+export interface MenuItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  isVeg: boolean;
+  bestseller?: boolean;
+}
+
 export interface Restaurant {
   id: string;
   name: string;
@@ -11,6 +22,12 @@ export interface Restaurant {
   categoryId: string;
   offers: string[];
   tags?: string[];
+  photos?: string[];
+  description?: string;
+  timings?: { open: string; close: string };
+  highlights?: string[];
+  menu?: MenuItem[];
+  contact?: { phone: string; address: string; website?: string };
 }
 
 export interface Category {
