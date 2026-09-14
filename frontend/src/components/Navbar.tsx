@@ -49,22 +49,22 @@ export function Navbar({
           }} 
           className="flex items-center gap-2 cursor-pointer select-none"
         >
-          <div className="size-10 bg-zomato rounded-xl flex items-center justify-center text-white shadow-lg shadow-zomato/20 animate-pulse">
+          <div className="size-10 bg-zomato rounded-xl flex items-center justify-center text-white shadow-lg shadow-zomato/25 hover:scale-105 hover:shadow-zomato/40 transition-all duration-300">
             <Utensils className="size-5" />
           </div>
-          <span className="text-2xl md:text-3xl font-extrabold tracking-tight">
+          <span className="text-2xl md:text-3xl font-extrabold tracking-tight hover:opacity-90 transition-opacity">
             zomato<span className="text-zomato">.</span>
           </span>
         </div>
 
         {/* Search & Location Bar (Only show if not in pure hero mode, or responsive) */}
         {!isHeroMode && (
-          <div className="hidden lg:flex items-center flex-1 max-w-2xl bg-white border border-gray-200 rounded-lg shadow-sm divide-x divide-gray-200 h-12 ml-4">
-            <div className="flex items-center gap-2 px-3 flex-shrink-0 w-44 cursor-pointer hover:bg-gray-50/50 rounded-l-lg h-full transition-colors">
-              <MapPin className="text-zomato size-5 shrink-0" />
-              <span className="text-sm font-medium truncate text-gray-700">{userLocation}</span>
+          <div className="hidden lg:flex items-center flex-1 max-w-2xl bg-white border border-gray-200 rounded-xl shadow-soft-sm divide-x divide-gray-100 h-12 ml-4 focus-within:border-zomato/40 focus-within:ring-2 focus-within:ring-zomato/10 transition-all duration-200">
+            <button className="flex items-center gap-2 px-3 flex-shrink-0 w-44 cursor-pointer hover:bg-gray-50/80 rounded-l-xl h-full transition-colors group">
+              <MapPin className="text-zomato size-5 shrink-0 group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-medium truncate text-gray-700 group-hover:text-gray-900 transition-colors">{userLocation}</span>
               <ChevronDown className="size-4 text-gray-400 ml-auto shrink-0" />
-            </div>
+            </button>
             
             <div className="flex items-center gap-2 px-3 flex-1 h-full relative">
               <Search className="text-gray-400 size-5 shrink-0" />
@@ -136,7 +136,7 @@ export function Navbar({
               </Button>
               <Button
                 onClick={() => setIsLoggedIn(true)}
-                className="bg-zomato hover:bg-zomato-dark text-white rounded-lg shadow-md shadow-zomato/10 hover:shadow-zomato/25 hover:scale-105 transition-all duration-200 font-semibold"
+                className="bg-zomato hover:bg-zomato-dark text-white rounded-lg shadow-md shadow-zomato/15 hover:shadow-zomato/30 hover:scale-[1.03] active:scale-95 transition-all duration-200 font-semibold"
               >
                 Sign up
               </Button>

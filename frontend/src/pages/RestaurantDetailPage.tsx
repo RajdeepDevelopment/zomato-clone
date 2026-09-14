@@ -55,13 +55,15 @@ function PhotoGallery({ photos }: { photos: string[] }) {
         <>
           <button
             onClick={prev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white/90 backdrop-blur shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-label="Previous photo"
+            className="absolute left-3 top-1/2 -translate-y-1/2 size-10 rounded-full bg-white/90 backdrop-blur shadow-soft-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 active:scale-95"
           >
             <ChevronLeft className="size-5" />
           </button>
           <button
             onClick={next}
-            className="absolute right-3 top-1/2 -translate-y-1/2 size-9 rounded-full bg-white/90 backdrop-blur shadow-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+            aria-label="Next photo"
+            className="absolute right-3 top-1/2 -translate-y-1/2 size-10 rounded-full bg-white/90 backdrop-blur shadow-soft-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 active:scale-95"
           >
             <ChevronRight className="size-5" />
           </button>
@@ -71,17 +73,19 @@ function PhotoGallery({ photos }: { photos: string[] }) {
       {/* Dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
         {photos.map((_, i) => (
-          <span
+          <button
             key={i}
-            className={`size-2 rounded-full transition-all ${
-              i === idx ? "bg-white scale-110" : "bg-white/50"
+            onClick={() => setIdx(i)}
+            aria-label={`Go to photo ${i + 1}`}
+            className={`rounded-full transition-all duration-300 ${
+              i === idx ? "w-5 h-2 bg-white" : "w-2 h-2 bg-white/50 hover:bg-white/80"
             }`}
           />
         ))}
       </div>
 
       {/* Photo count */}
-      <span className="absolute top-3 right-3 text-xs font-medium text-white bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full">
+      <span className="absolute top-3 right-3 text-xs font-medium text-white bg-black/50 backdrop-blur-sm px-2.5 py-1 rounded-full tabular-nums">
         {idx + 1} / {photos.length}
       </span>
     </div>
@@ -102,15 +106,15 @@ function MenuItemCard({
   onRemove: () => void;
 }) {
   return (
-    <div className="flex gap-4 py-4 border-b border-gray-100 last:border-0">
+    <div className="flex gap-4 py-5 border-b border-gray-100 last:border-0 hover:bg-gray-50/40 rounded-xl px-2 -mx-2 transition-colors duration-200">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5 mb-1">
           {item.isVeg ? (
-            <span className="size-4 border-2 border-green-600 rounded-sm flex items-center justify-center shrink-0">
+            <span className="size-4 border-2 border-green-600 rounded-sm flex items-center justify-center shrink-0" title="Veg">
               <span className="size-1.5 bg-green-600 rounded-full" />
             </span>
           ) : (
-            <span className="size-4 border-2 border-red-500 rounded-sm flex items-center justify-center shrink-0">
+            <span className="size-4 border-2 border-red-500 rounded-sm flex items-center justify-center shrink-0" title="Non-veg">
               <span className="size-1.5 bg-red-500 rounded-full" />
             </span>
           )}
@@ -122,15 +126,15 @@ function MenuItemCard({
             </Badge>
           )}
         </div>
-        <p className="text-sm font-bold text-gray-800">{rupees(item.price)}</p>
-        <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{item.description}</p>
+        <p className="text-sm font-bold text-gray-800 tabular-nums">{rupees(item.price)}</p>
+        <p className="text-xs text-gray-500 mt-0.5 line-clamp-2 leading-relaxed">{item.description}</p>
       </div>
       <div className="flex flex-col items-center gap-1.5 shrink-0">
-        <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100">
+        <div className="w-24 h-24 rounded-xl overflow-hidden bg-gray-100 ring-1 ring-black/5">
           <img
             src={item.image}
             alt={item.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             loading="lazy"
           />
         </div>
@@ -138,17 +142,17 @@ function MenuItemCard({
           <Button
             size="sm"
             onClick={onAdd}
-            className="w-24 h-8 text-xs font-bold rounded-lg bg-white text-green-700 border border-green-600 hover:bg-green-50"
+            className="w-24 h-8 text-xs font-bold rounded-lg bg-white text-green-700 border border-green-600 hover:bg-green-50 hover:border-green-700 hover:shadow-soft-sm transition-all duration-200 active:scale-95"
           >
             ADD
           </Button>
         ) : (
-          <div className="flex items-center gap-0 w-24 h-8 rounded-lg bg-green-600 text-white text-xs font-bold overflow-hidden">
-            <button onClick={onRemove} className="flex-1 h-full flex items-center justify-center hover:bg-green-700 transition-colors">
+          <div className="flex items-center gap-0 w-24 h-8 rounded-lg bg-green-600 text-white text-xs font-bold overflow-hidden shadow-soft-sm">
+            <button onClick={onRemove} aria-label="Decrease quantity" className="flex-1 h-full flex items-center justify-center hover:bg-green-700 active:bg-green-800 transition-colors">
               <Minus className="size-3" />
             </button>
-            <span className="w-8 text-center">{qty}</span>
-            <button onClick={onAdd} className="flex-1 h-full flex items-center justify-center hover:bg-green-700 transition-colors">
+            <span className="w-8 text-center tabular-nums">{qty}</span>
+            <button onClick={onAdd} aria-label="Increase quantity" className="flex-1 h-full flex items-center justify-center hover:bg-green-700 active:bg-green-800 transition-colors">
               <Plus className="size-3" />
             </button>
           </div>
@@ -175,10 +179,10 @@ function MenuTabs({
         <button
           key={c}
           onClick={() => onSelect(c)}
-          className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border ${
+          className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 border ${
             active === c
-              ? "bg-gray-900 text-white border-gray-900"
-              : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+              ? "bg-zomato text-white border-zomato shadow-md shadow-zomato/25"
+              : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:scale-95"
           }`}
         >
           {c}
@@ -286,11 +290,12 @@ export default function RestaurantDetailPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* ── Sticky top bar ── */}
-      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100">
-        <div className="container mx-auto px-4 md:px-6 h-14 flex items-center gap-4">
+      <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-soft-sm">
+        <div className="container mx-auto px-4 md:px-6 h-14 flex items-center gap-4 max-w-6xl">
           <button
             onClick={() => navigate("/")}
-            className="size-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+            className="size-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95"
+            aria-label="Back to home"
           >
             <ArrowLeft className="size-4 text-gray-700" />
           </button>
@@ -301,10 +306,16 @@ export default function RestaurantDetailPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <button className="size-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+            <button
+              className="size-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 hover:text-zomato"
+              aria-label="Save to favourites"
+            >
               <Heart className="size-4 text-gray-600" />
             </button>
-            <button className="size-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors">
+            <button
+              className="size-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 hover:text-zomato"
+              aria-label="Share"
+            >
               <Share2 className="size-4 text-gray-600" />
             </button>
           </div>
@@ -325,7 +336,7 @@ export default function RestaurantDetailPage() {
               </h2>
               <p className="text-sm text-gray-500 mt-1">{restaurant.cuisine.join(", ")}</p>
             </div>
-            <div className="flex items-center gap-1 shrink-0 bg-green-600 text-white px-2.5 py-1 rounded-lg text-sm font-bold">
+            <div className="flex items-center gap-1 shrink-0 bg-green-600 text-white px-2.5 py-1 rounded-lg text-sm font-bold shadow-soft-sm">
               <Star className="size-3.5 fill-current" />
               {restaurant.rating}
             </div>
@@ -360,7 +371,7 @@ export default function RestaurantDetailPage() {
                 <Badge
                   key={h}
                   variant="secondary"
-                  className="text-xs bg-gray-50 text-gray-700 border border-gray-200"
+                  className="text-xs bg-gray-50 text-gray-700 border border-gray-200 hover:border-zomato/30 hover:bg-zomato-light transition-all duration-200 px-3 py-1"
                 >
                   {h.includes("Veg") || h.includes("Pure") ? (
                     <Leaf className="size-3 mr-1 text-green-600" />
@@ -377,7 +388,7 @@ export default function RestaurantDetailPage() {
               {restaurant.offers.map((offer) => (
                 <div
                   key={offer}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 border border-green-200 rounded-lg text-xs font-semibold text-green-700"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 border border-green-200 rounded-lg text-xs font-semibold text-green-700 hover:border-green-300 hover:shadow-soft-sm transition-all duration-200"
                 >
                   <Flame className="size-3" />
                   {offer}
@@ -436,16 +447,21 @@ export default function RestaurantDetailPage() {
         <section>
           <h3 className="text-xl font-extrabold text-gray-900 mb-4">Reviews</h3>
           <div className="bg-gray-50 rounded-2xl p-8 text-center border border-dashed border-gray-200">
-            <Info className="size-8 text-gray-300 mx-auto mb-3" />
+            <div className="size-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-3">
+              <Info className="size-6 text-gray-400" />
+            </div>
             <p className="text-sm font-medium text-gray-600">
               Reviews coming soon — be the first to rate {restaurant.name}!
             </p>
-            <div className="flex items-center justify-center gap-1 mt-3">
+            <div className="flex items-center justify-center gap-1.5 mt-4">
               {[1, 2, 3, 4, 5].map((s) => (
-                <Star
+                <button
                   key={s}
-                  className="size-6 text-gray-300 hover:text-amber-400 cursor-pointer transition-colors"
-                />
+                  aria-label={`Rate ${s} star${s > 1 ? "s" : ""}`}
+                  className="text-gray-300 hover:text-amber-400 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer"
+                >
+                  <Star className="size-7" />
+                </button>
               ))}
             </div>
           </div>
@@ -457,23 +473,29 @@ export default function RestaurantDetailPage() {
         {restaurant.contact && (
           <section>
             <h3 className="text-xl font-extrabold text-gray-900 mb-4">Contact</h3>
-            <div className="bg-gray-50 rounded-2xl p-5 space-y-3 border border-gray-100">
+            <div className="bg-gray-50 rounded-2xl p-5 space-y-3 border border-gray-100 hover:border-gray-200 transition-colors duration-200 shadow-soft-sm">
               <div className="flex items-start gap-3 text-sm">
-                <MapPin className="size-4 text-gray-500 mt-0.5 shrink-0" />
-                <span className="text-gray-700">{restaurant.contact.address}</span>
+                <div className="size-8 rounded-full bg-white border border-gray-200 flex items-center justify-center shrink-0">
+                  <MapPin className="size-4 text-zomato" />
+                </div>
+                <span className="text-gray-700 leading-relaxed">{restaurant.contact.address}</span>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <Phone className="size-4 text-gray-500 shrink-0" />
+                <div className="size-8 rounded-full bg-white border border-gray-200 flex items-center justify-center shrink-0">
+                  <Phone className="size-4 text-zomato" />
+                </div>
                 <span className="text-gray-700">{restaurant.contact.phone}</span>
               </div>
               {restaurant.contact.website && (
                 <div className="flex items-center gap-3 text-sm">
-                  <Globe className="size-4 text-gray-500 shrink-0" />
+                  <div className="size-8 rounded-full bg-white border border-gray-200 flex items-center justify-center shrink-0">
+                    <Globe className="size-4 text-zomato" />
+                  </div>
                   <a
                     href={restaurant.contact.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-green-600 hover:underline"
+                    className="text-green-600 hover:underline hover:text-green-700 transition-colors"
                   >
                     {restaurant.contact.website}
                   </a>
@@ -489,17 +511,19 @@ export default function RestaurantDetailPage() {
 
       {/* ── Sticky cart sidebar (bottom bar on mobile) ── */}
       {cartQty > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-green-600 text-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)]">
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-green-600 text-white shadow-[0_-4px_24px_rgba(0,0,0,0.2)] animate-fade-in-up">
           <div className="container mx-auto px-4 md:px-6 max-w-6xl">
             <div className="flex items-center justify-between h-16">
               <div className="flex items-center gap-3">
-                <ShoppingCart className="size-5" />
+                <div className="size-9 rounded-full bg-white/20 flex items-center justify-center">
+                  <ShoppingCart className="size-5" />
+                </div>
                 <div>
                   <span className="text-sm font-bold">{cartQty} item{cartQty > 1 ? "s" : ""}</span>
-                  <span className="text-xs ml-2 opacity-80">{rupees(cartTotal)}</span>
+                  <span className="text-xs ml-2 opacity-80 tabular-nums">{rupees(cartTotal)}</span>
                 </div>
               </div>
-              <Button className="bg-white text-green-700 hover:bg-gray-100 font-bold text-sm h-10 px-6 rounded-xl">
+              <Button className="bg-white text-green-700 hover:bg-gray-100 font-bold text-sm h-10 px-6 rounded-xl hover:shadow-lg transition-all duration-200 active:scale-95">
                 View Cart
               </Button>
             </div>

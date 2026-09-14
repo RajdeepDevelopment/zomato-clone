@@ -81,11 +81,13 @@ function HomePage() {
       <main>
         {error ? (
           <div className="container mx-auto px-4 md:px-6 py-16 text-center">
-            <p className="text-red-500 text-lg font-medium mb-2">Something went wrong</p>
-            <p className="text-gray-500 text-sm mb-4">{error}</p>
-            <Button onClick={() => loadData(selectedCategoryId, searchQuery, sortBy)} variant="outline" size="sm">
-              Retry
-            </Button>
+            <div className="max-w-md mx-auto p-10 bg-gray-50 rounded-2xl border border-gray-100 shadow-soft-sm">
+              <p className="text-red-500 text-lg font-medium mb-2">Something went wrong</p>
+              <p className="text-gray-500 text-sm mb-6">{error}</p>
+              <Button onClick={() => loadData(selectedCategoryId, searchQuery, sortBy)} variant="outline" size="sm">
+                Retry
+              </Button>
+            </div>
           </div>
         ) : (
           <>
@@ -102,14 +104,15 @@ function HomePage() {
             )}
 
             {/* Filters / Sort bar */}
-            <div className="container mx-auto px-4 md:px-6 pt-6">
+            <div className="container mx-auto px-4 md:px-6 pt-6 border-b border-gray-100 pb-4">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <p className="text-sm text-gray-500">
-                  {restaurants.length} restaurant{restaurants.length !== 1 ? "s" : ""} found
+                <p className="text-sm text-gray-500 font-medium">
+                  <span className="font-bold text-gray-900 tabular-nums">{restaurants.length}</span>{" "}
+                  restaurant{restaurants.length !== 1 ? "s" : ""} found
                 </p>
 
                 {/* Sort pills */}
-                <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
                   {[
                     { id: "relevance", label: "Relevance", icon: Flame },
                     { id: "rating", label: "Rating 4.0+", icon: Star },
@@ -124,8 +127,8 @@ function HomePage() {
                         onClick={() => setSortBy(tab.id as any)}
                         className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all border ${
                           isActive
-                            ? "bg-zomato text-white border-zomato shadow-sm"
-                            : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50"
+                            ? "bg-zomato text-white border-zomato shadow-md shadow-zomato/25"
+                            : "bg-white text-gray-600 border-gray-200 hover:bg-gray-50 hover:border-gray-300 active:scale-95"
                         }`}
                       >
                         {Icon && <Icon className="size-3.5" />}
